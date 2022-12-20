@@ -25,6 +25,7 @@ void imprimeInicio(char ** argv, Arquivo * inLinhas, int tipo, double tempo) {
 	printf("Arquivo texto: '%s'\n", argv[1]);
 	printf("Numero de linhas no arquivo: %d\n", inLinhas -> numLinhas);
 	printf("Tempo para carregar o arquivo e construir o indice: %.f ms\n", tempo);
+	printf("> ");
 }
 
 void buscaImprime(char x[TAMANHO], Lista * lista, Arvore * arvore, int tipo, Arquivo * inLinhas) {

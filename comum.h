@@ -2,5 +2,5 @@
 
 typedef struct {
 	char ** linhasArquivo;
-	int qtdLinhas;
+	int numLinhas;
 } Arquivo;

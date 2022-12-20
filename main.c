@@ -1,8 +1,6 @@
 /*
  * Este arquivo contém a funcionalidade principal do programa.
  */
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 #include <time.h>
 
@@ -25,7 +23,7 @@ Arquivo * armazenaArquivo(FILE * in, Lista * lista, Arvore * arvore, int tipo) {
 void imprimeInicio(char ** argv, Arquivo * inLinhas, int tipo, double tempo) {
 	printf("Tipo de indice: '%s'\n", argv[2]);
 	printf("Arquivo texto: '%s'\n", argv[1]);
-	printf("Numero de linhas no arquivo: %d\n", inLinhas -> qtdLinhas);
+	printf("Numero de linhas no arquivo: %d\n", inLinhas -> numLinhas);
 	printf("Tempo para carregar o arquivo e construir o indice: %.f ms\n", tempo);
 }
 
@@ -67,7 +65,7 @@ int main(int argc, char ** argv) {
 		if (!strcmp(entrada, "fim")) return 0;
 	        if (strcmp(entrada, "busca")) {
 			printf("Opcao invalida!\n> ");
-			break;
+			continue;
 		}
 		scanf("%s", entrada);
 		buscaImprime(entrada, lista, arvore, tipo, inLinhas);

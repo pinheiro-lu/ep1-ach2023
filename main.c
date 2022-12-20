@@ -6,32 +6,30 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "comum.h"
+#include "lista.h"
+#include "arvore.h"
+
 #define LISTA 0
 #define ARVORE 1
-#define TAMANHO 1000
 
-char ** armazenaArquivo(FILE * in, Lista * lista, Arvore * arvore, int tipo) {
+Arquivo * armazenaArquivo(FILE * in, Lista * lista, Arvore * arvore, int tipo) {
 	if (tipo == LISTA) {
 		lista = criaLista();
-		return armazenaArquivoLista(FILE * in, Lista * lista);
+		return armazenaArquivoLista(in, lista);
 	} 
 	arvore = criaArvore();
-	return armazenaArquivoArvore(FILE * in, Arvore * arvore);
+	return armazenaArquivoArvore(in, arvore);
 }
 
-int numLinhasArquivo(Lista * lista, Arvore * arvore, int tipo) {
-	if (tipo == LISTA) return numLinhasArquivoLista(lista);
-	return numLinhasArquivoArvore(arvore);
-}
-
-void imprimeInicio(char ** argv, Lista * lista, Arvore * arvore, int tipo, double tempo) {
+void imprimeInicio(char ** argv, Arquivo * inLinhas, int tipo, double tempo) {
 	printf("Tipo de indice: '%s'\n", argv[2]);
 	printf("Arquivo texto: '%s'\n", argv[1]);
-	printf("Numero de linhas no arquivo: %d\n", numLinhasArquivo(Lista * lista, Arvore * arvore, int tipo));
+	printf("Numero de linhas no arquivo: %d\n", inLinhas -> qtdLinhas);
 	printf("Tempo para carregar o arquivo e construir o indice: %.f ms\n", tempo);
 }
 
-void buscaImprime(char * x, Lista * lista, Arvore * arvore, int tipo, char ** inLinhas) {
+void buscaImprime(char x[TAMANHO], Lista * lista, Arvore * arvore, int tipo, Arquivo * inLinhas) {
 	if (tipo == LISTA) buscaImprimeLista(x, lista, inLinhas);
 	else buscaImprimeArvore(x, arvore, inLinhas);
 }
@@ -56,11 +54,11 @@ int main(int argc, char ** argv) {
 
 	Lista * lista;
 	Arvore * arvore;
-	char ** inLinhas = armazenaArquivo(in, lista, arvore, tipo);
+	Arquivo * inLinhas = armazenaArquivo(in, lista, arvore, tipo);
 	
 	time_t fim = time(NULL);
 
-	imprimeInicio(argv, lista, arvore, tipo, difftime(inicio, fim) * 1000);
+	imprimeInicio(argv, inLinhas, tipo, difftime(inicio, fim) * 1000);
 	
 	char entrada[TAMANHO + 1];
 

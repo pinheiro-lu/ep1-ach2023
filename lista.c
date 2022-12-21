@@ -73,8 +73,8 @@ PalavraLista criaPalavra(char palavra[TAMANHO], Arquivo * arquivo) {
 	novo -> linhaOcorrencia = arquivo -> numLinhas - 1;
 	novo -> proximo = NULL;
 
-	f -> ultimo = f -> ultimo = novo;
-
+	f -> ultimo = f -> primeiro = novo;
+	p.ocorrenciasPalavra = f;
 	return p;
 }
 
@@ -92,7 +92,7 @@ void insere (Lista * lista, char palavra[TAMANHO], Arquivo * arquivo) {
 	lista -> numPalavras++;
 	lista -> palavras = (PalavraLista *) realloc(lista -> palavras, lista -> numPalavras * sizeof(PalavraLista));
 
-	for (i = lista -> numPalavras-1; i && strcmp(lista -> palavras[i].palavra, palavra) > 0; i--) {
+	for (i = lista -> numPalavras-1; i && strcmp(lista -> palavras[i-1].palavra, palavra) > 0; i--) {
 		lista -> palavras[i] = lista -> palavras[i-1];
 	}
 
@@ -124,7 +124,7 @@ Arquivo * armazenaArquivoLista(FILE * in, Lista * lista) {
 
 		while (palavra = strsep(&copia_ponteiro_linha, " ")) {
 			tiraPontuacao(palavra);
-			if (palavra)
+			if (palavra[0] != '\0')
 				insere(lista, palavra, a);
 		}	
 	}
@@ -133,4 +133,26 @@ Arquivo * armazenaArquivoLista(FILE * in, Lista * lista) {
 }
 
 void buscaImprimeLista(char x[TAMANHO], Lista * lista, Arquivo * inLinhas) {
+	clock_t inicio = clock();
+	
+	converteParaMinuscula(x);
+	int indice = buscaPalavra(lista, x);
+
+	clock_t fim = clock();
+
+	if (indice == -1) {
+		printf("Palavra '%s' nao encontrada.\n", x);
+	} else {
+		printf("Existem %d ocorrências da palavra '%s' na(s) seguinte(s) linha(s):\n", lista -> palavras[indice].numOcorrenciasPalavra, x);
+		NoFila * no = lista -> palavras[indice].ocorrenciasPalavra->primeiro;
+		int linhaAnt = -1;
+		while (no) {
+			if (linhaAnt != no->linhaOcorrencia)
+				printf("%05d: %s\n", no->linhaOcorrencia+1, inLinhas->linhasArquivo[no->linhaOcorrencia]);
+			linhaAnt = no->linhaOcorrencia;
+			no = no -> proximo;
+		}
+	}
+
+	printf("Tempo de busca: %.f ms\n> ", 1000.0 * (fim - inicio) / CLOCKS_PER_SEC); 
 }

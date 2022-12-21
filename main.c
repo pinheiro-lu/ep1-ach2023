@@ -2,7 +2,6 @@
  * Este arquivo contém a funcionalidade principal do programa.
  */
 #include <stdbool.h>
-#include <time.h>
 
 #include "comum.h"
 #include "lista.h"
@@ -13,10 +12,8 @@
 
 Arquivo * armazenaArquivo(FILE * in, Lista * lista, Arvore * arvore, int tipo) {
 	if (tipo == LISTA) {
-		lista = criaLista();
 		return armazenaArquivoLista(in, lista);
 	} 
-	arvore = criaArvore();
 	return armazenaArquivoArvore(in, arvore);
 }
 
@@ -45,30 +42,32 @@ int main(int argc, char ** argv) {
 		tipo = ARVORE;
 	else return 2;
 	
-	time_t inicio = time(NULL);
+	clock_t inicio = clock();
 
 	FILE * in = fopen(argv[1], "r");
 
 	if (!in) return 3;
 
-	Lista * lista;
-	Arvore * arvore;
+	Lista * lista = criaLista();
+	Arvore * arvore = criaArvore();
 	Arquivo * inLinhas = armazenaArquivo(in, lista, arvore, tipo);
 	
-	time_t fim = time(NULL);
+	clock_t fim = clock();
 
-	imprimeInicio(argv, inLinhas, tipo, difftime(inicio, fim) * 1000);
+	imprimeInicio(argv, inLinhas, tipo, (double) 1000.0*(fim-inicio)/CLOCKS_PER_SEC);
 	
-	char entrada[TAMANHO + 1];
+	char * entrada = NULL;
 
 	while (true) {
-		scanf("%s", entrada);
-		if (!strcmp(entrada, "fim")) return 0;
-	        if (strcmp(entrada, "busca")) {
+		long unsigned int tam = TAMANHO;
+		getline(&entrada, &tam, stdin);
+		if (!strcmp(entrada, "fim\n")) return 0;
+	        if (strncmp(entrada, "busca", strlen("busca"))) {
 			printf("Opcao invalida!\n> ");
 			continue;
 		}
-		scanf("%s", entrada);
+		entrada = &entrada[strlen("busca ")];
+		entrada[strlen(entrada)-1] = '\0';
 		buscaImprime(entrada, lista, arvore, tipo, inLinhas);
 	}	
 			

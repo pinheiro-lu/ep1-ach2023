@@ -27,5 +27,7 @@ As linhas do arquivo de texto são armazenadas por completo em um arranjo.
 As palavras do arquivo são armazenadas na estrutura escolhida pelo usuário. Junto às palavras são também armazenadas informações úteis, tais como o número de ocorrências de determinada palavra e os números das linhas dessas ocorrências. Estes últimos são guardados por meio de uma fila (os primeiros a entrarem são os primeiros a serem impressos).
 A busca simplesmente faz uso das características de cada estrutura, imprimindo a palavra buscada, o número de ocorrências e as linhas de ocorrência na íntegra.
 
+#
+
 **Obs**: O programa tem funcionamento limitado a arquivos de texto com linhas de até mil caracteres.
 

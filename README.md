@@ -11,7 +11,7 @@ O arquivo `out.out` será o executável.
 
 Execute o programa passando dois argumentos:
 
-	1. O arquivo de texto que você deseja realizar a indexação e busca de palavras;
+	1. O arquivo de texto que você deseja realizar a indexação e busca de palavras;<br>
 	2. A estrutura que você deseja utilizar ('lista' ou 'arvore').
 
 	Exemplo:

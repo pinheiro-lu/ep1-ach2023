@@ -10,6 +10,6 @@ typedef struct {
 	PalavraArvore * raiz;
 } Arvore;
 
-Arvore * criaArvore(void);
+Arvore * criaArvore(void); 
 Arquivo * armazenaArquivoArvore(FILE * in, Arvore * arvore);
 void buscaImprimeArvore(char x[TAMANHO], Arvore * arvore, Arquivo * inLinhas);

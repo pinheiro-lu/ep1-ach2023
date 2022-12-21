@@ -1,6 +1,6 @@
 typedef struct __palavra_arvore__ {
 	char palavra[TAMANHO];
-	int * ocorrenciasPalavra;
+	Fila * ocorrenciasPalavra;
 	int numOcorrenciasPalavra;
 	struct __palavra_arvore__ * esquerda;
 	struct __palavra_arvore__ * direita;

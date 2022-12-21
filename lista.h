@@ -1,17 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <time.h>
-
-typedef struct __no_fila__ {
-	int linhaOcorrencia;
-	struct __no_fila__ * proximo;
-} NoFila;
-
-typedef struct {
-	NoFila * primeiro;
-	NoFila * ultimo;
-} Fila;
 
 typedef struct {
 	char palavra[TAMANHO];

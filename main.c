@@ -3,7 +3,8 @@
  */
 #include <stdbool.h>
 
-#include "comum.h"
+//#include "comum.h"
+#include "auxiliarEstruturas.h"
 #include "lista.h"
 #include "arvore.h"
 

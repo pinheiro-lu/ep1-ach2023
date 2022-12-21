@@ -1,7 +1,7 @@
-#include <ctype.h>
-
-#include "comum.h"
+//#include "comum.h"
+#include "auxiliarEstruturas.h"
 #include "lista.h"
+#include "arvore.h"
 
 Lista * criaLista(void) {
 	Lista * l = (Lista *) malloc(sizeof(Lista));
@@ -10,26 +10,7 @@ Lista * criaLista(void) {
 	return l;
 }
 
-void trocaHifenPorEspaco (char * frase) {
-	for (int i = 0; i < strlen(frase); i++) 
-		if (frase[i] == '-')
-			frase[i] = ' ';
-}
-
-void tiraPontuacao (char * palavra) {
-	for (int i = 0; i < strlen(palavra); i++)
-		if ((palavra[i] >= '!' && palavra[i] <= '/') || (palavra[i] >= ':' && palavra[i] <= '@') || (palavra[i] >= '[' && palavra[i] <= '`') || (palavra[i] >= '{' && palavra[i] <= '~')) {
-			palavra[i] = '\0';
-			return;
-		}
-}
-
-void converteParaMinuscula(char palavra[TAMANHO]) {
-	for (int i = 0; i < strlen(palavra); i++)
-		palavra[i] = tolower(palavra[i]);
-}
-
-int buscaPalavra(Lista * lista, char palavra[TAMANHO]) {
+int buscaPalavraLista(Lista * lista, char palavra[TAMANHO]) {
 	int ini = 0;
 	int fim = lista -> numPalavras - 1;
 	int meio;
@@ -50,17 +31,7 @@ int buscaPalavra(Lista * lista, char palavra[TAMANHO]) {
 	return -1;
 }
 
-void insereFila(Fila * fila, int x) {
-	NoFila * novo = (NoFila *) malloc(sizeof(NoFila));
-
-	novo -> linhaOcorrencia = x;
-	novo -> proximo = NULL;
-
-	fila -> ultimo -> proximo = novo;
-	fila -> ultimo = novo;
-}
-
-PalavraLista criaPalavra(char palavra[TAMANHO], Arquivo * arquivo) {
+PalavraLista criaPalavraLista(char palavra[TAMANHO], Arquivo * arquivo) {
 	PalavraLista p;
 
 	strcpy(p.palavra, palavra);
@@ -78,10 +49,10 @@ PalavraLista criaPalavra(char palavra[TAMANHO], Arquivo * arquivo) {
 	return p;
 }
 
-void insere (Lista * lista, char palavra[TAMANHO], Arquivo * arquivo) {
+void insereLista (Lista * lista, char palavra[TAMANHO], Arquivo * arquivo) {
 	converteParaMinuscula(palavra);
 
-	int i = buscaPalavra(lista, palavra);
+	int i = buscaPalavraLista(lista, palavra);
 
 	if (i != -1) {
 		lista -> palavras[i].numOcorrenciasPalavra++;
@@ -96,7 +67,7 @@ void insere (Lista * lista, char palavra[TAMANHO], Arquivo * arquivo) {
 		lista -> palavras[i] = lista -> palavras[i-1];
 	}
 
-	lista -> palavras[i] = criaPalavra(palavra, arquivo);
+	lista -> palavras[i] = criaPalavraLista(palavra, arquivo);
 }
 
 Arquivo * armazenaArquivoLista(FILE * in, Lista * lista) {
@@ -125,7 +96,7 @@ Arquivo * armazenaArquivoLista(FILE * in, Lista * lista) {
 		while (palavra = strsep(&copia_ponteiro_linha, " ")) {
 			tiraPontuacao(palavra);
 			if (palavra[0] != '\0')
-				insere(lista, palavra, a);
+				insereLista(lista, palavra, a);
 		}	
 	}
 
@@ -136,7 +107,7 @@ void buscaImprimeLista(char x[TAMANHO], Lista * lista, Arquivo * inLinhas) {
 	clock_t inicio = clock();
 	
 	converteParaMinuscula(x);
-	int indice = buscaPalavra(lista, x);
+	int indice = buscaPalavraLista(lista, x);
 
 	clock_t fim = clock();
 
@@ -144,14 +115,7 @@ void buscaImprimeLista(char x[TAMANHO], Lista * lista, Arquivo * inLinhas) {
 		printf("Palavra '%s' nao encontrada.\n", x);
 	} else {
 		printf("Existem %d ocorrências da palavra '%s' na(s) seguinte(s) linha(s):\n", lista -> palavras[indice].numOcorrenciasPalavra, x);
-		NoFila * no = lista -> palavras[indice].ocorrenciasPalavra->primeiro;
-		int linhaAnt = -1;
-		while (no) {
-			if (linhaAnt != no->linhaOcorrencia)
-				printf("%05d: %s\n", no->linhaOcorrencia+1, inLinhas->linhasArquivo[no->linhaOcorrencia]);
-			linhaAnt = no->linhaOcorrencia;
-			no = no -> proximo;
-		}
+		imprimeFila(lista->palavras[indice].ocorrenciasPalavra, inLinhas);
 	}
 
 	printf("Tempo de busca: %.f ms\n> ", 1000.0 * (fim - inicio) / CLOCKS_PER_SEC); 
